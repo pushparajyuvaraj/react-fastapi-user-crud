@@ -14,10 +14,7 @@ jobs:
   backend-check:
     name: Backend FastAPI Check
     runs-on: ubuntu-latest
-
-  docker-build:
-    name: Docker Build Check
-    runs-on: ubuntu-latest
+  
 
     steps:
       - name: Get code from GitHub
