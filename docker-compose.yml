@@ -1,16 +1,25 @@
+version: "3.9"
+
 services:
   backend:
-    build:
-      context: ./backend
+    build: ./backend
     container_name: fastapi-backend
     ports:
       - "8000:8000"
     volumes:
       - ./backend:/app
+    depends_on:
+      - mysql
+      - mongodb
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_DB=mydb
+      - MONGO_URL=mongodb://mongodb:27017
 
   frontend:
-    build:
-      context: ./frontend
+    build: ./frontend
     container_name: react-frontend
     ports:
       - "5174:5173"
@@ -18,6 +27,29 @@ services:
       - ./frontend:/app
       - /app/node_modules
     environment:
-      - VITE_API_URL=http://localhost:8000
-    depends_on:
-      - backend
+      - VITE_API_URL=https://react-fastapi-user-crud-backend.onrender.com
+
+  mysql:
+    image: mysql:8
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydb
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  mongodb:
+    image: mongo:6
+    container_name: mongo-db
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mysql_data:
+  mongo_data:

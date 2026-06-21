@@ -1,0 +1,8 @@
+from motor.motor_asyncio import AsyncIOMotorClient
+import os
+
+client = AsyncIOMotorClient(os.getenv("MONGO_URL"))
+db = client["mydatabase"]
+
+def get_mongo_db():
+    return db
